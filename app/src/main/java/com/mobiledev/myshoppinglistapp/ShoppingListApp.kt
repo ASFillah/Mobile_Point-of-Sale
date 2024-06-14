@@ -16,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,8 +29,8 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShoppingListApp() {
-    var sItems by remember { mutableStateOf(listOf<ShoppingItem>()) }
+fun ShoppingListApp(viewModel: ShoppingListViewModel) {
+    val sItems by viewModel.items.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     var itemName by remember { mutableStateOf("") }
     var itemStock by remember { mutableStateOf("") }
@@ -60,11 +61,11 @@ fun ShoppingListApp() {
             items(sItems) { item ->
                 ShoppingListItem(
                     item = item,
-                    onEditClick = {updatedItem ->
-                        sItems = sItems.map { if (it.id == updatedItem.id) updatedItem else it }
+                    onEditClick = { updatedItem ->
+                        viewModel.editItem(updatedItem)
                     },
                     onDeleteClick = {
-                        sItems = sItems.filter { it.id != item.id }
+                        viewModel.deleteItem(item.id)
                     }
                 )
             }
@@ -87,13 +88,11 @@ fun ShoppingListApp() {
                     }
                     Button(onClick = {
                         if (itemName.isNotBlank() && itemPrice.isNotBlank() && itemStock.isNotBlank()) {
-                            val newItem = ShoppingItem(
-                                id = sItems.size + 1,
+                            viewModel.addItem(
                                 name = itemName,
                                 price = itemPrice.toDouble(),
                                 stock = itemStock.toInt()
                             )
-                            sItems += newItem
                             showDialog = false
                         }
                     }) {
