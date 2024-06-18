@@ -29,12 +29,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mobiledev.myshoppinglistapp.Response.Data
+import com.mobiledev.myshoppinglistapp.Response.DataItem
+import com.mobiledev.myshoppinglistapp.Response.DeleteProdukResponse
+import com.mobiledev.myshoppinglistapp.Response.EditProdukResponse
 
 @Composable
 fun ShoppingListItem(
-    item: ShoppingItem,
-    onEditClick: (ShoppingItem) -> Unit,
-    onDeleteClick: () -> Unit
+    item: DataItem,
+    onEditClick: (EditProdukResponse) -> Unit,
+    onDeleteClick: (DeleteProdukResponse) -> Unit
 ) {
     var showEditor by remember { mutableStateOf(false) }
     var showDeleteConfirmation by remember { mutableStateOf(false) }
@@ -42,8 +46,14 @@ fun ShoppingListItem(
     if (showEditor){
         ShoppingItemEditor(
             item = item,
-            onEditComplete = {name, price, stock ->
-                onEditClick(ShoppingItem(item.id, name, price, stock))
+            onEditComplete = {namaProduk, hargaProduk, stokProduk ->
+                val data = Data(
+                    id = item.id,
+                    namaProduk = namaProduk,
+                    hargaProduk = hargaProduk,
+                    stokProduk = stokProduk
+                )
+                onEditClick(EditProdukResponse(data = data))
                 showEditor = false
             }
         )
@@ -63,7 +73,8 @@ fun ShoppingListItem(
                         Text(text = "Cancel")
                     }
                     Button(onClick = {
-                        onDeleteClick()
+                        val response = DeleteProdukResponse(error = false, message = "Product deleted successfully")
+                        onDeleteClick(response)
                         showDeleteConfirmation = false
                     }) {
                         Text(text = "Delete")
@@ -83,7 +94,7 @@ fun ShoppingListItem(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ){
-                    Text("Are you sure you want to delete ${item.name}?")
+                    Text("Are you sure you want to delete ${item.namaProduk}?")
                 }
             }
         )
@@ -99,18 +110,21 @@ fun ShoppingListItem(
             )
     ) {
         Column(modifier = Modifier.weight(1f)) {
+            item.namaProduk?.let {
+                Text(
+                    text = it,
+                    modifier = Modifier.padding(start = 8.dp, bottom = 2.dp,top = 8.dp),
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        lineHeight = 1.sp
+                    ),
+                )
+            }
+            Text(text = "Stock: ${item.stokProduk}",
+                modifier = Modifier.padding(start = 8.dp))
             Text(
-                text = item.name,
-                modifier = Modifier.padding(start = 8.dp, bottom = 2.dp,top = 8.dp),
-                style = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    lineHeight = 1.sp
-                ),
-            )
-            Text(text = "Stock: ${item.stock}", modifier = Modifier.padding(start = 8.dp))
-            Text(
-                text = "Price: ${"%.2f".format(item.price)}",
+                text = "Price: ${item.hargaProduk}",
                 modifier = Modifier.padding(start = 8.dp, bottom = 8.dp)
             )
         }

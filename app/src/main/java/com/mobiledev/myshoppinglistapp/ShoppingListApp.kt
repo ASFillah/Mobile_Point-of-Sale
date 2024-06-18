@@ -61,11 +61,12 @@ fun ShoppingListApp(viewModel: ShoppingListViewModel) {
             items(sItems) { item ->
                 ShoppingListItem(
                     item = item,
-                    onEditClick = { updatedItem ->
-                        viewModel.editItem(updatedItem)
+                    onEditClick = { EditProdukResponse ->
+                        viewModel.editItem(EditProdukResponse)
                     },
                     onDeleteClick = {
-                        viewModel.deleteItem(item.id)
+                        val itemId = item.id ?: ""
+                        viewModel.deleteItem(itemId)
                     }
                 )
             }
@@ -90,7 +91,7 @@ fun ShoppingListApp(viewModel: ShoppingListViewModel) {
                         if (itemName.isNotBlank() && itemPrice.isNotBlank() && itemStock.isNotBlank()) {
                             viewModel.addItem(
                                 name = itemName,
-                                price = itemPrice.toDouble(),
+                                price = itemPrice.toInt(),
                                 stock = itemStock.toInt()
                             )
                             showDialog = false

@@ -22,13 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.mobiledev.myshoppinglistapp.Response.DataItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShoppingItemEditor(item: ShoppingItem, onEditComplete: (String, Double, Int) -> Unit) {
-    var editedName by remember { mutableStateOf(item.name) }
-    var editedPrice by remember { mutableStateOf(item.price.toString()) }
-    var editedStock by remember { mutableStateOf(item.stock.toString()) }
+fun ShoppingItemEditor(item: DataItem, onEditComplete: (String, Int, Int) -> Unit) {
+    var editedName by remember { mutableStateOf(item.namaProduk) }
+    var editedPrice by remember { mutableStateOf(item.hargaProduk.toString()) }
+    var editedStock by remember { mutableStateOf(item.stokProduk.toString()) }
     var showDialog by remember { mutableStateOf(true) }
 
     if (showDialog) {
@@ -48,10 +49,10 @@ fun ShoppingItemEditor(item: ShoppingItem, onEditComplete: (String, Double, Int)
                     }
                     Button(onClick = {
                         val name = editedName
-                        val price = editedPrice.toDoubleOrNull()
+                        val price = editedPrice.toIntOrNull()
                         val stock = editedStock.toIntOrNull()
-                        if (name.isNotBlank() && price != null && stock != null) {
-                            onEditComplete(name, price.toDouble(), stock)
+                        if (name != null && price != null && stock != null) {
+                            onEditComplete(name, price, stock)
                             showDialog = false
                         }
                     }) {
@@ -69,17 +70,19 @@ fun ShoppingItemEditor(item: ShoppingItem, onEditComplete: (String, Double, Int)
             },
             text = {
                 Column {
-                    OutlinedTextField(
-                        value = editedName,
-                        onValueChange = { editedName = it },
-                        label = { Text("Name") },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            capitalization = KeyboardCapitalization.Sentences
+                    editedName?.let {
+                        OutlinedTextField(
+                            value = it,
+                            onValueChange = { editedName = it },
+                            label = { Text("Name") },
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth(),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Text,
+                                capitalization = KeyboardCapitalization.Sentences
+                            )
                         )
-                    )
+                    }
                     OutlinedTextField(
                         value = editedStock,
                         onValueChange = { editedStock = it },
