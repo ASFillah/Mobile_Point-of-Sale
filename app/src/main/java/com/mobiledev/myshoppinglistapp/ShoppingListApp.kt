@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShoppingListApp(viewModel: ShoppingListViewModel) {
+fun ShoppingListApp(viewModel: ProdukViewModel) {
     val sItems by viewModel.items.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     var itemName by remember { mutableStateOf("") }
@@ -65,8 +65,7 @@ fun ShoppingListApp(viewModel: ShoppingListViewModel) {
                         viewModel.editItem(EditProdukResponse)
                     },
                     onDeleteClick = {
-                        val itemId = item.id ?: ""
-                        viewModel.deleteItem(itemId)
+                        item.id?.let { id -> viewModel.deleteItem(id) }
                     }
                 )
             }
@@ -82,8 +81,7 @@ fun ShoppingListApp(viewModel: ShoppingListViewModel) {
                         .fillMaxWidth()
                         .padding(8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
-                )
-                {
+                ) {
                     Button(onClick = { showDialog = false }) {
                         Text(text = "Cancel")
                     }

@@ -19,6 +19,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "BASE_URL", "\"https://10c31cc8-8aca-4d4f-962c-bdae297688f4.mock.pstmn.io/\"")
     }
 
     buildTypes {
@@ -39,6 +41,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -76,6 +79,8 @@ dependencies {
 
     // JSON to Kotlin object mapping
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
     //Image loading
     implementation("io.coil-kt:coil-compose:2.4.0")

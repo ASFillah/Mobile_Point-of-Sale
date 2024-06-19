@@ -46,7 +46,7 @@ fun ShoppingListItem(
     if (showEditor){
         ShoppingItemEditor(
             item = item,
-            onEditComplete = {namaProduk, hargaProduk, stokProduk ->
+            onEditComplete = { namaProduk, hargaProduk, stokProduk ->
                 val data = Data(
                     id = item.id,
                     namaProduk = namaProduk,

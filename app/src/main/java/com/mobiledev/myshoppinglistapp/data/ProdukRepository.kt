@@ -1,13 +1,21 @@
-package com.mobiledev.myshoppinglistapp
+package com.mobiledev.myshoppinglistapp.data
 
 import com.mobiledev.myshoppinglistapp.Response.DataItem
 import com.mobiledev.myshoppinglistapp.Response.EditProdukResponse
+import com.mobiledev.myshoppinglistapp.Retrofit.ApiService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class ShoppingListRepository {
+class ProdukRepository (
+    val apiService: ApiService
+) {
+
     private val _items = MutableStateFlow<List<DataItem>>(emptyList())
     val items: StateFlow<List<DataItem>> = _items
+
+    fun setItems(newItems: List<DataItem>) {
+        _items.value = newItems
+    }
 
     fun addItem(name: String, price: Int, stock: Int) {
         val newItem = DataItem(

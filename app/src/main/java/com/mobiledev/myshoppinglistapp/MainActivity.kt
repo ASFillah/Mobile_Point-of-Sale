@@ -8,12 +8,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.mobiledev.myshoppinglistapp.Retrofit.ApiConfig
+import com.mobiledev.myshoppinglistapp.data.ProdukRepository
 import com.mobiledev.myshoppinglistapp.ui.theme.MyShoppingListAppTheme
 
 class MainActivity : ComponentActivity() {
-    private val repository = ShoppingListRepository()
+    private val repository: ProdukRepository by lazy {
+        ProdukRepository(ApiConfig.getApiService())
+    }
     private val viewModelFactory = ShoppingListViewModelFactory(repository)
-    private val viewModel: ShoppingListViewModel by viewModels { viewModelFactory }
+    private val viewModel: ProdukViewModel by viewModels { viewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

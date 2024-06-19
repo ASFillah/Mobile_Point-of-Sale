@@ -2,12 +2,13 @@ package com.mobiledev.myshoppinglistapp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.mobiledev.myshoppinglistapp.data.ProdukRepository
 
-class ShoppingListViewModelFactory(private val repository: ShoppingListRepository) : ViewModelProvider.Factory {
+class ShoppingListViewModelFactory(private val repository: ProdukRepository) : ViewModelProvider.Factory {
     override fun  <T : ViewModel> create(modelClass: Class<T>): T{
-        if (modelClass.isAssignableFrom(ShoppingListViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(ProdukViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ShoppingListViewModel(repository) as T
+            return ProdukViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
