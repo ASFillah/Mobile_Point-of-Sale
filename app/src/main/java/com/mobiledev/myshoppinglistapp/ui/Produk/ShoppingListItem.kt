@@ -1,4 +1,4 @@
-package com.mobiledev.myshoppinglistapp
+package com.mobiledev.myshoppinglistapp.ui.Produk
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -29,35 +29,15 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mobiledev.myshoppinglistapp.Response.Data
 import com.mobiledev.myshoppinglistapp.Response.DataItem
-import com.mobiledev.myshoppinglistapp.Response.DeleteProdukResponse
-import com.mobiledev.myshoppinglistapp.Response.EditProdukResponse
 
 @Composable
 fun ShoppingListItem(
     item: DataItem,
-    onEditClick: (EditProdukResponse) -> Unit,
-    onDeleteClick: (DeleteProdukResponse) -> Unit
+    onEditClick: (DataItem) -> Unit,
+    onDeleteClick: (String) -> Unit
 ) {
-    var showEditor by remember { mutableStateOf(false) }
     var showDeleteConfirmation by remember { mutableStateOf(false) }
-
-    if (showEditor){
-        ShoppingItemEditor(
-            item = item,
-            onEditComplete = { namaProduk, hargaProduk, stokProduk ->
-                val data = Data(
-                    id = item.id,
-                    namaProduk = namaProduk,
-                    hargaProduk = hargaProduk,
-                    stokProduk = stokProduk
-                )
-                onEditClick(EditProdukResponse(data = data))
-                showEditor = false
-            }
-        )
-    }
 
     if (showDeleteConfirmation){
         AlertDialog(
@@ -73,8 +53,7 @@ fun ShoppingListItem(
                         Text(text = "Cancel")
                     }
                     Button(onClick = {
-                        val response = DeleteProdukResponse(error = false, message = "Product deleted successfully")
-                        onDeleteClick(response)
+                        item.id?.let { id -> onDeleteClick(id)}
                         showDeleteConfirmation = false
                     }) {
                         Text(text = "Delete")
@@ -94,7 +73,7 @@ fun ShoppingListItem(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ){
-                    Text("Are you sure you want to delete ${item.namaProduk}?")
+                    Text("Are you sure you want to delete this product ?")
                 }
             }
         )
@@ -130,7 +109,7 @@ fun ShoppingListItem(
         }
 
         Row(modifier = Modifier.align(Alignment.CenterVertically)) {
-            IconButton(onClick = { showEditor = true }) {
+            IconButton(onClick = { onEditClick(item) }) {
                 Icon(imageVector = Icons.Default.Edit, contentDescription = null)
             }
             IconButton(onClick = { showDeleteConfirmation = true }) {

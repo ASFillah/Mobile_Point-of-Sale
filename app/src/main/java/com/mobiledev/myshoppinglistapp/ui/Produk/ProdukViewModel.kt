@@ -1,11 +1,10 @@
-package com.mobiledev.myshoppinglistapp
+package com.mobiledev.myshoppinglistapp.ui.Produk
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mobiledev.myshoppinglistapp.Response.DataItem
-import com.mobiledev.myshoppinglistapp.Response.EditProdukResponse
 import com.mobiledev.myshoppinglistapp.Response.GetProdukResponse
 import com.mobiledev.myshoppinglistapp.data.ProdukRepository
 import com.mobiledev.myshoppinglistapp.data.ResultState
@@ -42,21 +41,20 @@ class ProdukViewModel (private val repository: ProdukRepository) : ViewModel() {
     }
 
 
-    fun addItem(name: String, price: Int, stock: Int) {
-        viewModelScope.launch {
-            repository.addItem(name, price, stock)
+    suspend fun addItem(name: String, price: Int, stock: Int, category: String) {
+        val result = repository.addItem(name, price, stock, category)
+        if (result is ResultState.Success) {
+            getItem() // Refresh items after adding the product
         }
     }
 
-    fun editItem(updateItem: EditProdukResponse) {
-        viewModelScope.launch {
-            repository.editItem(updateItem)
-        }
+    suspend fun editItem(id: String, produk: DataItem) {
+        repository.editItem(id, produk)
+        getItem()
     }
 
-    fun deleteItem(itemId: String) {
-        viewModelScope.launch {
-            repository.deleteItem(itemId)
-        }
+    suspend fun deleteItem(id: String) {
+        repository.deleteItem(id)
+        getItem()
     }
 }

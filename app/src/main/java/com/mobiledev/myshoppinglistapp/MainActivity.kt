@@ -10,6 +10,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.mobiledev.myshoppinglistapp.Retrofit.ApiConfig
 import com.mobiledev.myshoppinglistapp.data.ProdukRepository
+import com.mobiledev.myshoppinglistapp.di.ShoppingListViewModelFactory
+import com.mobiledev.myshoppinglistapp.ui.Produk.ProdukViewModel
+import com.mobiledev.myshoppinglistapp.ui.Produk.ShoppingListApp
 import com.mobiledev.myshoppinglistapp.ui.theme.MyShoppingListAppTheme
 
 class MainActivity : ComponentActivity() {

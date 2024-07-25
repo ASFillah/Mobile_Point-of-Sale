@@ -1,7 +1,6 @@
 package com.mobiledev.myshoppinglistapp.data
 
 import com.mobiledev.myshoppinglistapp.Response.DataItem
-import com.mobiledev.myshoppinglistapp.Response.EditProdukResponse
 import com.mobiledev.myshoppinglistapp.Retrofit.ApiService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,32 +16,35 @@ class ProdukRepository (
         _items.value = newItems
     }
 
-    fun addItem(name: String, price: Int, stock: Int) {
-        val newItem = DataItem(
-            id = (_items.value.size + 1).toString(),
-            namaProduk = name,
-            hargaProduk = price,
-            stokProduk = stock
-        )
-        _items.value = _items.value + newItem
-    }
-
-    fun editItem(updateItem: EditProdukResponse) {
-        _items.value = _items.value.map { dataItem ->
-            if (dataItem.id == updateItem.data?.id) {
-                DataItem(
-                    id = updateItem.data?.id ?: dataItem.id,
-                    namaProduk = updateItem.data?.namaProduk ?: dataItem.namaProduk,
-                    hargaProduk = updateItem.data?.hargaProduk ?: dataItem.hargaProduk,
-                    stokProduk = updateItem.data?.stokProduk ?: dataItem.stokProduk
-                )
+    suspend fun addItem(name: String, price: Int, stock: Int, kategori: String): ResultState<Unit> {
+        return try {
+            val response = apiService.addProduk(name, price.toString(), stock.toString(), kategori)
+            if (response.error == false) {
+                ResultState.Success(Unit)
             } else {
-                dataItem
+                ResultState.Error("Failed to add item: ${response.message}")
             }
+
+        } catch (e: Exception) {
+            ResultState.Error("Failed to add item: ${e.message}")
         }
     }
 
-    fun deleteItem(itemId: String) {
-        _items.value = _items.value.filter { it.id != itemId }
+    suspend fun editItem(id: String, produk: DataItem): ResultState<Unit> {
+        return try {
+            apiService.editProduk(id, produk)
+            ResultState.Success(Unit)
+        } catch (e: Exception) {
+            ResultState.Error("Failed to edit item: ${e.message}")
+        }
+    }
+
+    suspend fun deleteItem(id: String): ResultState<Unit> {
+        return try {
+            apiService.deleteProduk(id)
+            ResultState.Success(Unit)
+        } catch (e: Exception) {
+            ResultState.Error("Failed to delete item: ${e.message}")
+        }
     }
 }

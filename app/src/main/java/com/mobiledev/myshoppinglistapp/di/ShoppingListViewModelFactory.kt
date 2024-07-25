@@ -1,7 +1,8 @@
-package com.mobiledev.myshoppinglistapp
+package com.mobiledev.myshoppinglistapp.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.mobiledev.myshoppinglistapp.ui.Produk.ProdukViewModel
 import com.mobiledev.myshoppinglistapp.data.ProdukRepository
 
 class ShoppingListViewModelFactory(private val repository: ProdukRepository) : ViewModelProvider.Factory {

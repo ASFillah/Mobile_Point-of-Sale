@@ -1,4 +1,4 @@
-package com.mobiledev.myshoppinglistapp
+package com.mobiledev.myshoppinglistapp.ui.Produk
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,13 +48,11 @@ fun ShoppingItemEditor(item: DataItem, onEditComplete: (String, Int, Int) -> Uni
                         Text(text = "Cancel")
                     }
                     Button(onClick = {
-                        val name = editedName
-                        val price = editedPrice.toIntOrNull()
-                        val stock = editedStock.toIntOrNull()
-                        if (name != null && price != null && stock != null) {
-                            onEditComplete(name, price, stock)
-                            showDialog = false
-                        }
+                        val name = editedName ?: item.namaProduk ?: ""
+                        val price = editedPrice.toIntOrNull() ?: item.hargaProduk ?: 0
+                        val stock = editedStock.toIntOrNull() ?: item.stokProduk ?: 0
+                        onEditComplete(name, price, stock)
+                        showDialog = false
                     }) {
                         Text(text = "Save")
                     }
