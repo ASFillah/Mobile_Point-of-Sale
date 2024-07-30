@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 
 object ApiConfig {
 
-    fun getApiService(): ApiService {
+    fun getApiService(): ProdukApiService {
         val loggingInterceptor = if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         } else {
@@ -26,6 +26,6 @@ object ApiConfig {
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
-        return retrofit.create(ApiService::class.java)
+        return retrofit.create(ProdukApiService::class.java)
     }
 }

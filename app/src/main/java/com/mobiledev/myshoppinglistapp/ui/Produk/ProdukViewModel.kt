@@ -1,11 +1,10 @@
 package com.mobiledev.myshoppinglistapp.ui.Produk
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mobiledev.myshoppinglistapp.Response.DataItem
-import com.mobiledev.myshoppinglistapp.Response.GetProdukResponse
+import com.mobiledev.myshoppinglistapp.Response.ProdukResponse.DataItem
+import com.mobiledev.myshoppinglistapp.Response.ProdukResponse.GetProdukResponse
 import com.mobiledev.myshoppinglistapp.data.ProdukRepository
 import com.mobiledev.myshoppinglistapp.data.ResultState
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +14,7 @@ class ProdukViewModel (private val repository: ProdukRepository) : ViewModel() {
     val items: StateFlow<List<DataItem>> = repository.items
 
     private val _produkLiveData = MutableLiveData<ResultState<GetProdukResponse>>()
-    val produkLiveData: LiveData<ResultState<GetProdukResponse>> = _produkLiveData
+//    val produkLiveData: LiveData<ResultState<GetProdukResponse>> = _produkLiveData
 
     init {
         getItem()

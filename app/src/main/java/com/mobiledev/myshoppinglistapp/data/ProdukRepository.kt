@@ -1,12 +1,12 @@
 package com.mobiledev.myshoppinglistapp.data
 
-import com.mobiledev.myshoppinglistapp.Response.DataItem
-import com.mobiledev.myshoppinglistapp.Retrofit.ApiService
+import com.mobiledev.myshoppinglistapp.Response.ProdukResponse.DataItem
+import com.mobiledev.myshoppinglistapp.Retrofit.ProdukApiService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class ProdukRepository (
-    val apiService: ApiService
+    val apiService: ProdukApiService
 ) {
 
     private val _items = MutableStateFlow<List<DataItem>>(emptyList())
